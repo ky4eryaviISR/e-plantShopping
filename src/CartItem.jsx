@@ -9,30 +9,32 @@ const CartItem = ({ onContinueShopping }) => {
 
   // Calculate total amount for all products in the cart
   const calculateTotalAmount = () => {
-    return cart.reduce((sum, item) => {sum + item.cost * item.quantity});
+    console.log(cart)
+    const val = cart.reduce((total, item) => total + Number(item.cost.substring(1)) * item.quantity,0);
+    console.log(val);
+    return val;
 
   };
 
   const handleContinueShopping = (e) => {
-    onContinueShopping();
+    onContinueShopping(e);
   };
 
 
 
   const handleIncrement = (item) => {
-    const item = cart.find(item => item.name === item.name);
-    item.quantity ++;
-    dispatch(updateQuantity(item))
+    item = cart.find(product => product.name === item.name);
+    dispatch(updateQuantity({name:item.name, quantity: item.quantity+1}))
   };
 
   const handleDecrement = (item) => {
-    const item = cart.find(item => item.name === item.name);
-    item.quantity --;
-    if( item.quantity == 0){
+    item = cart.find(product => product.name === item.name);
+    if( item.quantity == 1){
         dispatch(removeItem(item))
-        return
     }
-    dispatch(updateQuantity(item))
+    else{
+        dispatch(updateQuantity({name:item.name, quantity: item.quantity-1}))
+    }
   };
 
   const handleRemove = (item) => {
@@ -41,7 +43,7 @@ const CartItem = ({ onContinueShopping }) => {
 
   // Calculate total cost based on quantity for an item
   const calculateTotalCost = (item) => {
-    return item.quantity * item.cost
+    return item.quantity * Number(item.cost.substring(1))
   };
   const handleCheckoutShopping = (e) => {
     alert('Functionality to be added for future reference');
@@ -71,7 +73,7 @@ const CartItem = ({ onContinueShopping }) => {
       <div className="continue_shopping_btn">
         <button className="get-started-button" onClick={(e) => handleContinueShopping(e)}>Continue Shopping</button>
         <br />
-        <button className="get-started-button1">Checkout</button>
+        <button className="get-started-button1" onClick={(e) => handleCheckoutShopping(e)}>Checkout</button>
       </div>
     </div>
   );
